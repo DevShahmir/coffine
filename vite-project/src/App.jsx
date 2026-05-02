@@ -14,6 +14,7 @@ import { AuthProvider } from './Context/AuthProvider'
 import { CartProvider } from './Context/CartProvider'
 import ProtectedRoute from './Components/ProtectedRout'
 import { OrderProvider } from './Context/OrderProvider'
+import ScrollToTop from './Components/ScrollToTop'
 
 function App() {
   
@@ -23,6 +24,7 @@ function App() {
     <AuthProvider>
     <CartProvider>
     <OrderProvider>
+    <ScrollToTop />
     <Navbar/>
     <Routes>
       <Route path="/" element={<Homepage />} />

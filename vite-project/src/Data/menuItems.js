@@ -115,7 +115,7 @@ export const menuItems = [
     name: "Hibiscus Tea",
     description: "A ruby-red herbal infusion with a tart cranberry-like flavour — served hot or iced.",
     price: 3.25,
-    image: "https://images.unsplash.com/photo-1576092762791-dd9e2220c476?w=400&h=300&fit=crop",
+    image: "https://static.vecteezy.com/system/resources/thumbnails/051/201/143/small/refreshing-cup-of-hibiscus-tea-cut-out-on-an-isolated-simple-minimalist-background-photo.jpg",
     category: "Tea",
     ingredients: ["Dried hibiscus flowers", "Water", "Honey"]
   },
@@ -209,7 +209,7 @@ export const menuItems = [
     name: "Butter Croissant",
     description: "Flaky, golden layers of French pastry with a crisp exterior and soft, buttery interior.",
     price: 3.25,
-    image: "https://images.unsplash.com/photo-1549996647-190b679b33d7?w=400&h=300&fit=crop",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-pHplhFOuPND1fYM-MPag6PI1vZZd6DiyJQ&s",
     category: "Food",
     ingredients: ["Flour", "Butter", "Yeast", "Sugar", "Salt"]
   },
@@ -245,7 +245,7 @@ export const menuItems = [
     name: "Cinnamon Roll",
     description: "Soft, pillowy dough swirled with cinnamon-sugar and drizzled with a vanilla cream glaze.",
     price: 4.25,
-    image: "https://images.unsplash.com/photo-1550426735-c33c7cc30ca2?w=400&h=300&fit=crop",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFmuU_kPhfrnegaTkMMsUZwbVPq38uSaRfNw&s",
     category: "Food",
     ingredients: ["Flour", "Cinnamon", "Brown sugar", "Butter", "Cream cheese glaze"]
   },
