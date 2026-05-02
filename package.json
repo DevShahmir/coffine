@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "dev": "npm run dev --prefix vite-project",
+    "build": "npm run build --prefix vite-project",
+    "preview": "npm run preview --prefix vite-project"
+  },
+  "dependencies": {
+    "framer-motion": "^10.18.0",
+    "react-router-dom": "^7.14.2"
+  }
+}

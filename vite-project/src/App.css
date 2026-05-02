@@ -1,0 +1,101 @@
+/* ── Mobile Responsive Styles ─────────────────────────────── */
+
+/* Hamburger button: show on mobile */
+@media (max-width: 768px) {
+  .hamburger-btn {
+    display: flex !important;
+  }
+
+  /* Collapse nav links + auth into a vertical dropdown */
+  .nav-collapse {
+    display: none !important;
+    flex-direction: column;
+    width: 100%;
+    gap: 1.5rem !important;
+    padding-top: 1.2rem;
+    border-top: 1px solid #1e1e1e;
+    margin-top: 1rem;
+  }
+
+  .nav-collapse.nav-open {
+    display: flex !important;
+  }
+
+  .nav-links {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    align-items: center;
+  }
+
+  .nav-auth {
+    flex-direction: column !important;
+    gap: 0.8rem !important;
+    align-items: center;
+  }
+
+  .navbar {
+    padding: 1rem 1.2rem !important;
+  }
+
+  /* ── Hero ── */
+  .hero-section {
+    padding: 4rem 1.2rem 3rem !important;
+    min-height: auto !important;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+    text-align: center;
+  }
+
+  .hero-grid > div:first-child {
+    order: 1;
+  }
+
+  .hero-cup {
+    order: 0;
+  }
+
+  .hero-cup > div {
+    height: 300px !important;
+  }
+
+  /* ── How It Works ── */
+  .steps-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
+  }
+
+  /* Hide the connecting line on mobile */
+  .steps-grid > div:first-child {
+    display: none;
+  }
+
+  /* General section padding reduction */
+  section {
+    padding-left: 1.2rem !important;
+    padding-right: 1.2rem !important;
+  }
+
+  /* Item detail page */
+  .item-detail-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+}
+
+/* Tablet: slightly more room */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .navbar {
+    padding: 1rem 1.5rem !important;
+  }
+
+  .hero-section {
+    padding: 5rem 2rem 3rem !important;
+  }
+
+  .hero-grid {
+    gap: 2rem !important;
+  }
+}
