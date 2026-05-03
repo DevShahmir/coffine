@@ -81,9 +81,9 @@ const Footer = () => {
             Contact
           </h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.7rem', color: '#888', fontSize: '0.88rem' }}>
-            <span>hello@coffine.com</span>
-            <span>+1 (555) 123-4567</span>
-            <span>123 Bean Street, Brew City</span>
+            <span>Shahmir.khaan100@gmail.com</span>
+            <span>+92 320 4308869</span>
+            <span>Lahore,Pakistan</span>
           </div>
         </div>
 
