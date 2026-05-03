@@ -424,7 +424,7 @@ const HowItWorks = () => {
   const [selectedStep, setSelectedStep] = useState(null)
 
   const steps = [
-    { icon: '🫘', num: '01', title: 'Choose Your Coffee', desc: 'Browse our curated menu of handcrafted blends — from bold espressos to smooth lattes.' },
+    { icon: '☕', num: '01', title: 'Choose Your Coffee', desc: 'Browse our curated menu of handcrafted blends — from bold espressos to smooth lattes.' },
     { icon: '⚗️', num: '02', title: 'Customise Your Taste', desc: 'Adjust strength, milk, sweetness. Every cup made exactly to your preference.' },
     { icon: '⚡', num: '03', title: 'Fast Delivery', desc: 'Your order is freshly prepared and delivered straight to you, hot and on time.' },
   ]
@@ -654,7 +654,7 @@ const Features = () => {
   const items = [
     { icon: '⚡', title: 'Fast Delivery', desc: 'Your coffee reaches you hot, fresh, and on time — every single time.' },
     { icon: '🎨', title: 'Custom Orders', desc: 'Dial in your perfect cup. Strength, milk, sugar — all your way.' },
-    { icon: '🫘', title: 'Premium Beans', desc: 'Single-origin, ethically sourced beans from the world\'s finest estates.' },
+    { icon: '🌱', title: 'Premium Beans', desc: 'Single-origin, ethically sourced beans from the world\'s finest estates.' },
     { icon: '💳', title: 'Easy Payments', desc: 'Seamless checkout. Order in seconds, enjoy in minutes.' },
   ]
 
