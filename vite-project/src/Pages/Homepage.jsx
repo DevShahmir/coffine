@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from 'framer-motion'
 import { menuItems } from '../Data/menuItems'
 
 // ── Variants ──────────────────────────────────────────────
@@ -650,6 +650,147 @@ const BrandStory = () => {
 }
 
 // ── FEATURES ──────────────────────────────────────────────
+const FeatureCard = ({ item, i }) => {
+  const cardRef = React.useRef(null)
+  const [isHovered, setIsHovered] = useState(false)
+  const [isClicked, setIsClicked] = useState(false)
+
+  // 3D tilt
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const rotateX = useTransform(useSpring(y, { stiffness: 400, damping: 30 }), [-0.5, 0.5], ['7deg', '-7deg'])
+  const rotateY = useTransform(useSpring(x, { stiffness: 400, damping: 30 }), [-0.5, 0.5], ['-7deg', '7deg'])
+
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    const mouseX = e.clientX - rect.left
+    const mouseY = e.clientY - rect.top
+    x.set(mouseX / rect.width - 0.5)
+    y.set(mouseY / rect.height - 0.5)
+    cardRef.current.style.setProperty('--mouse-x', `${mouseX}px`)
+    cardRef.current.style.setProperty('--mouse-y', `${mouseY}px`)
+  }
+
+  const handleMouseLeave = () => {
+    setIsHovered(false)
+    x.set(0)
+    y.set(0)
+  }
+
+  const handleClick = () => {
+    if (isClicked) return
+    setIsClicked(true)
+    setTimeout(() => setIsClicked(false), 800)
+  }
+
+  return (
+    <motion.div
+      ref={cardRef}
+      variants={{
+        hidden: { opacity: 0, y: 40 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+      }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={handleMouseLeave}
+      onMouseMove={handleMouseMove}
+      onClick={handleClick}
+      animate={isClicked ? { scale: [1, 0.95, 1.05, 1] } : isHovered ? { y: -8 } : { y: 0 }}
+      transition={isClicked ? { duration: 0.5, ease: "easeInOut" } : { duration: 0.3, ease: 'easeOut' }}
+      style={{
+        rotateX, rotateY, transformStyle: 'preserve-3d',
+        backgroundColor: '#111',
+        borderRadius: 16, padding: '2.5rem 2rem', cursor: 'pointer',
+        position: 'relative', overflow: 'hidden',
+        boxShadow: isHovered ? '0 20px 40px -15px rgba(201,168,76,0.1)' : '0 0 0 rgba(0,0,0,0)',
+        border: '1px solid #1a1a1a'
+      }}>
+      
+      {/* Spotlight Effect overlay */}
+      <motion.div
+        animate={{ opacity: isHovered ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+        style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
+          background: 'radial-gradient(400px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(201,168,76,0.06), transparent 40%)'
+        }}
+      />
+      
+      {/* Border Spotlight */}
+      <motion.div
+        animate={{ opacity: isHovered ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+        style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, borderRadius: 16,
+          padding: 1, // acts as border width
+          background: 'radial-gradient(400px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(201,168,76,0.4), transparent 40%)',
+          WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+          WebkitMaskComposite: 'xor',
+          maskComposite: 'exclude',
+        }}
+      />
+
+      <div style={{ position: 'relative', zIndex: 1, transform: 'translateZ(30px)' }}>
+        <motion.div
+          animate={isHovered ? { scale: 1.15, y: -4 } : { scale: 1, y: 0 }}
+          style={{
+            fontSize: '2.5rem', marginBottom: '1.5rem', display: 'inline-flex',
+            alignItems: 'center', justifyContent: 'center', position: 'relative',
+            filter: isHovered ? 'drop-shadow(0 0 15px rgba(201,168,76,0.5))' : 'none',
+            transition: 'filter 0.4s'
+          }}>
+          {item.icon}
+          
+          {/* Advanced Particle Burst */}
+          <AnimatePresence>
+            {isClicked && (
+              <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+                {[...Array(8)].map((_, idx) => (
+                  <motion.span key={idx} 
+                    initial={{ scale: 0, x: 0, y: 0, opacity: 1 }}
+                    animate={{ 
+                      scale: [0, 1.5, 0], 
+                      x: Math.cos(idx * 45 * Math.PI / 180) * 60, 
+                      y: Math.sin(idx * 45 * Math.PI / 180) * 60,
+                      opacity: [1, 1, 0] 
+                    }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    style={{
+                      position: 'absolute', top: '50%', left: '50%', marginTop: -4, marginLeft: -4,
+                      width: 8, height: 8, borderRadius: '50%',
+                      background: idx % 2 === 0 ? '#c9a84c' : '#fff8e7',
+                      boxShadow: '0 0 10px #c9a84c',
+                    }} />
+                ))}
+                {/* Rings expanding */}
+                <motion.div 
+                  initial={{ scale: 0.5, opacity: 0.8 }}
+                  animate={{ scale: 3, opacity: 0 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  style={{
+                    position: 'absolute', inset: -10, borderRadius: '50%',
+                    border: '2px solid rgba(201,168,76,0.6)',
+                  }}
+                />
+              </div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+        
+        <h3 style={{
+          fontFamily: 'Playfair Display, serif', color: '#f5f5f5',
+          fontSize: '1.25rem', marginBottom: '0.8rem', letterSpacing: '0.02em',
+        }}>
+          {item.title}
+        </h3>
+        <p style={{ color: '#888', fontSize: '0.9rem', lineHeight: 1.8 }}>
+          {item.desc}
+        </p>
+      </div>
+    </motion.div>
+  )
+}
+
 const Features = () => {
   const items = [
     { icon: '⚡', title: 'Fast Delivery', desc: 'Your coffee reaches you hot, fresh, and on time — every single time.' },
@@ -676,34 +817,20 @@ const Features = () => {
           Built for Coffee Lovers
         </motion.h2>
 
-        <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-          gap: '1.5rem',
-        }}>
+        <motion.div
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.15 } }
+          }}
+          initial="hidden" whileInView="visible" viewport={{ once: true }}
+          style={{
+            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '1.5rem',
+          }}>
           {items.map((item, i) => (
-            <motion.div key={item.title} variants={fadeUp} custom={i}
-              initial="hidden" whileInView="visible" viewport={{ once: true }}
-              whileHover={{ y: -6 }}
-              style={{
-                backgroundColor: '#111', border: '1px solid #1a1a1a',
-                borderRadius: 10, padding: '2rem',
-              }}>
-              <motion.div whileHover={{ scale: 1.2, rotate: 10 }}
-                style={{ fontSize: '2rem', marginBottom: '1.2rem', display: 'inline-block' }}>
-                {item.icon}
-              </motion.div>
-              <h3 style={{
-                fontFamily: 'Playfair Display, serif', color: '#f5f5f5',
-                fontSize: '1.1rem', marginBottom: '0.6rem',
-              }}>
-                {item.title}
-              </h3>
-              <p style={{ color: '#666', fontSize: '0.85rem', lineHeight: 1.7 }}>
-                {item.desc}
-              </p>
-            </motion.div>
+            <FeatureCard key={item.title} item={item} i={i} />
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )
