@@ -354,12 +354,90 @@ const FeaturedProducts = () => {
 }
 
 // ── HOW IT WORKS ───────────────────────────────────────────
+const StepCard = ({ step, i, onClick }) => {
+  const [isHovered, setIsHovered] = useState(false)
+
+  return (
+    <motion.div
+      variants={fadeUp} custom={i}
+      initial="hidden" whileInView="visible" viewport={{ once: true }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      onClick={() => onClick(step)}
+      animate={isHovered ? { scale: 1.05 } : { scale: 1 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
+      style={{
+        textAlign: 'center', padding: '2rem 1rem', cursor: 'pointer',
+        borderRadius: 16,
+        backgroundColor: isHovered ? 'rgba(201,168,76,0.04)' : 'transparent',
+      }}
+    >
+      <div style={{ position: 'relative', width: 80, height: 80, margin: '0 auto 1.5rem' }}>
+        {/* Rotating Glow Ring */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+          style={{
+            position: 'absolute', inset: -2, borderRadius: '50%',
+            background: 'conic-gradient(from 0deg, transparent 0%, rgba(201,168,76,0.8) 25%, #fff8e7 50%, #ff9900 75%, transparent 100%)',
+            filter: 'blur(6px)', opacity: isHovered ? 1 : 0.4,
+            transition: 'opacity 0.3s'
+          }}
+        />
+        {/* Static Circle */}
+        <motion.div
+          animate={isHovered ? { scale: 1.05 } : { scale: 1 }}
+          transition={{ duration: 0.3 }}
+          style={{
+            position: 'absolute', inset: 0, borderRadius: '50%',
+            background: '#0d0d0d',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '2rem', zIndex: 1,
+          }}>
+          {step.icon}
+        </motion.div>
+      </div>
+      <p style={{ color: '#c9a84c', fontSize: '0.7rem', letterSpacing: '0.2em', marginBottom: '0.6rem' }}>
+        {step.num}
+      </p>
+      <h3 style={{
+        fontFamily: 'Playfair Display, serif', color: '#f5f5f5',
+        fontSize: '1.2rem', marginBottom: '0.8rem',
+      }}>
+        {step.title}
+      </h3>
+      <p style={{ color: '#666', fontSize: '0.88rem', lineHeight: 1.7 }}>
+        {step.desc}
+      </p>
+      
+      <motion.p
+        animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
+        style={{ color: '#c9a84c', fontSize: '0.75rem', marginTop: '1.5rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}
+      >
+        View Detail →
+      </motion.p>
+    </motion.div>
+  )
+}
+
 const HowItWorks = () => {
+  const [selectedStep, setSelectedStep] = useState(null)
+
   const steps = [
     { icon: '🫘', num: '01', title: 'Choose Your Coffee', desc: 'Browse our curated menu of handcrafted blends — from bold espressos to smooth lattes.' },
     { icon: '⚗️', num: '02', title: 'Customise Your Taste', desc: 'Adjust strength, milk, sweetness. Every cup made exactly to your preference.' },
     { icon: '⚡', num: '03', title: 'Fast Delivery', desc: 'Your order is freshly prepared and delivered straight to you, hot and on time.' },
   ]
+
+  // Prevent scrolling when modal is open
+  useEffect(() => {
+    if (selectedStep) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    return () => { document.body.style.overflow = 'unset' }
+  }, [selectedStep])
 
   return (
     <section style={{
@@ -405,34 +483,102 @@ const HowItWorks = () => {
           />
 
           {steps.map((step, i) => (
-            <motion.div key={step.num} variants={fadeUp} custom={i}
-              initial="hidden" whileInView="visible" viewport={{ once: true }}
-              style={{ textAlign: 'center', padding: '0 1rem' }}>
-              <div style={{
-                width: 80, height: 80, borderRadius: '50%',
-                background: 'linear-gradient(135deg, #1a1a1a, #111)',
-                border: '1px solid #2a2a2a', margin: '0 auto 1.5rem',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '2rem', position: 'relative', zIndex: 1,
-              }}>
-                {step.icon}
-              </div>
-              <p style={{ color: '#c9a84c', fontSize: '0.7rem', letterSpacing: '0.2em', marginBottom: '0.6rem' }}>
-                {step.num}
-              </p>
-              <h3 style={{
-                fontFamily: 'Playfair Display, serif', color: '#f5f5f5',
-                fontSize: '1.2rem', marginBottom: '0.8rem',
-              }}>
-                {step.title}
-              </h3>
-              <p style={{ color: '#666', fontSize: '0.88rem', lineHeight: 1.7 }}>
-                {step.desc}
-              </p>
-            </motion.div>
+            <StepCard key={step.num} step={step} i={i} onClick={setSelectedStep} />
           ))}
         </div>
       </div>
+
+      {/* Modal Overlay */}
+      <AnimatePresence>
+        {selectedStep && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedStep(null)}
+            style={{
+              position: 'fixed', inset: 0, zIndex: 9999,
+              backgroundColor: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(10px)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              padding: '1.5rem',
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.5, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.8, opacity: 0, y: 50 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              onClick={e => e.stopPropagation()} // Prevent close when clicking inside
+              style={{
+                backgroundColor: '#0a0a0a', border: '1px solid #1f1f1f',
+                borderRadius: 24, padding: '3rem 2rem', maxWidth: 500, width: '100%',
+                position: 'relative', textAlign: 'center',
+                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
+              }}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedStep(null)}
+                style={{
+                  position: 'absolute', top: 20, right: 20,
+                  background: 'transparent', border: 'none', color: '#666',
+                  fontSize: '1.5rem', cursor: 'pointer', transition: 'color 0.2s',
+                }}
+                onMouseOver={e => e.target.style.color = '#fff'}
+                onMouseOut={e => e.target.style.color = '#666'}
+              >
+                ✕
+              </button>
+
+              {/* Huge Modal Icon Container */}
+              <motion.div
+                initial={{ scale: 0.5, rotate: -45 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', damping: 15, stiffness: 150, delay: 0.1 }}
+                style={{
+                  position: 'relative',
+                  width: 'min(50vmin, 180px)', height: 'min(50vmin, 180px)',
+                  margin: '0 auto 3rem',
+                }}
+              >
+                {/* Rotating glow */}
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 3.5, repeat: Infinity, ease: 'linear' }}
+                  style={{
+                    position: 'absolute', inset: -8, borderRadius: '50%',
+                    background: 'conic-gradient(from 0deg, transparent 0%, rgba(201,168,76,0.8) 25%, #fff8e7 50%, #ff9900 75%, transparent 100%)',
+                    filter: 'blur(16px)',
+                    opacity: 0.85,
+                  }}
+                />
+                {/* Solid inner circle */}
+                <div style={{
+                  position: 'absolute', inset: 0, borderRadius: '50%',
+                  background: '#0d0d0d',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 'min(20vmin, 80px)', zIndex: 1,
+                }}>
+                  {selectedStep.icon}
+                </div>
+              </motion.div>
+
+              <p style={{ color: '#c9a84c', fontSize: '0.85rem', letterSpacing: '0.3em', marginBottom: '1rem' }}>
+                STEP {selectedStep.num}
+              </p>
+              <h3 style={{
+                fontFamily: 'Playfair Display, serif', color: '#f5f5f5',
+                fontSize: 'clamp(1.5rem, 5vw, 2.2rem)', marginBottom: '1.2rem',
+              }}>
+                {selectedStep.title}
+              </h3>
+              <p style={{ color: '#999', fontSize: '1.05rem', lineHeight: 1.8, maxWidth: 400, margin: '0 auto' }}>
+                {selectedStep.desc}
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }
