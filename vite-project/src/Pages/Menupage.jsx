@@ -2,8 +2,9 @@ import { useCallback, useMemo, useState } from 'react'
 import { menuItems } from '../Data/menuItems'
 import { useCart } from '../Hooks/useCart'
 import { useAuth } from '../Hooks/useAuth'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useToast } from '../Components/Toast'
+import MenuCard from '../Components/MenuCard'
 
 const categories = ['All', 'Coffee', 'Tea', 'Food', 'Energy Drink']
 
@@ -112,78 +113,12 @@ const Menupage = () => {
       {/* Items Grid */}
       <div style={styles.itemsGrid}>
         {filteredItems.map(item => (
-          <div key={item.id} style={{
-            backgroundColor: '#1a1a1a',
-            border: '1px solid #2a2a2a',
-            borderRadius: '8px',
-            overflow: 'hidden',
-            display: 'flex',
-            flexDirection: 'column',
-          }}>
-            <Link to={`/item/${item.id}`} style={{ textDecoration: 'none' }}>
-              <div style={styles.imageContainer}>
-                <img src={item.image} alt={item.name} style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }} />
-              </div>
-            </Link>
-
-            <div style={styles.imageContainer2}>
-              <span style={{
-                color: '#c9a84c',
-                fontSize: '0.7rem',
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-              }}>
-                {item.category}
-              </span>
-              <h3 style={{
-                fontFamily: 'Playfair Display, serif',
-                fontSize: '1.3rem',
-                color: '#f5f5f5',
-                margin: '0.4rem 0',
-              }}>
-                {item.name}
-              </h3>
-              <p style={{
-                color: '#888',
-                fontSize: '0.85rem',
-                lineHeight: '1.6',
-                marginBottom: '1rem',
-                flexGrow: 1,
-              }}>
-                {item.description}
-              </p>
-              <span style={{
-                color: '#c9a84c',
-                fontSize: '1.1rem',
-                fontWeight: '600',
-              }}>
-                ${item.price.toFixed(2)}
-              </span>
-            </div>
-
-            <div style={{ padding: '0 1.5rem 1.5rem' }}>
-              <button onClick={() => handleAddToCart(item)} style={{
-                width: '100%',
-                backgroundColor: addedItems[item.id] ? '#4caf7d' : 'transparent',
-                border: '1px solid',
-                borderColor: addedItems[item.id] ? '#4caf7d' : '#c9a84c',
-                color: addedItems[item.id] ? '#0a0a0a' : '#c9a84c',
-                padding: '0.6rem',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '0.85rem',
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: '600',
-                transition: 'all 0.3s ease',
-              }}>
-                {addedItems[item.id] ? 'Added!' : 'Add to Cart'}
-              </button>
-            </div>
-          </div>
+          <MenuCard
+            key={item.id}
+            item={item}
+            isAdded={Boolean(addedItems[item.id])}
+            onAddToCart={handleAddToCart}
+          />
         ))}
       </div>
 

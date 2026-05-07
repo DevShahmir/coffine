@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { useCart } from '../Hooks/useCart'
 import { useAuth } from '../Hooks/useAuth'
 import { menuItems } from '../Data/menuItems'
